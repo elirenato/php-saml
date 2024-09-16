@@ -120,16 +120,17 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
     {
         $settingsDir = TEST_ROOT . '/settings/';
         include $settingsDir . 'settings1.php';
-        $settings = new OneLogin_Saml2_Settings($settingsInfo);
-        $authnRequest = new OneLogin_Saml2_AuthnRequest($settings);
+
+        $settings = new Settings($settingsInfo);
+        $authnRequest = new AuthnRequest($settings);
         $encodedRequest = $authnRequest->getRequest();
         $decoded = base64_decode($encodedRequest);
         $request = gzinflate($decoded);
         $this->assertNotContains('<samlp:Scoping', $request);
 
-        $settingsInfo['idp']['scoping']['proxyCount'] = 2;
-        $settings2 = new OneLogin_Saml2_Settings($settingsInfo);
-        $authnRequest2 = new OneLogin_Saml2_AuthnRequest($settings2);
+        $settingsInfo['sp']['authnRequest']['scoping']['proxyCount'] = 2;
+        $settings2 = new Settings($settingsInfo);
+        $authnRequest2 = new AuthnRequest($settings2);
         $encodedRequest2 = $authnRequest2->getRequest();
         $decoded2 = base64_decode($encodedRequest2);
         $request2 = gzinflate($decoded2);
@@ -137,10 +138,10 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains('<samlp:IDPEntry', $request2);
         $this->assertNotContains('<samlp:RequesterID>', $request2);
 
-        unset($settingsInfo['idp']['scoping']['proxyCount']);
-        $settingsInfo['idp']['scoping']['idpList'] = ['http://idp2.example.com'];
-        $settings3 = new OneLogin_Saml2_Settings($settingsInfo);
-        $authnRequest3 = new OneLogin_Saml2_AuthnRequest($settings3);
+        unset($settingsInfo['sp']['authnRequest']['scoping']['proxyCount']);
+        $settingsInfo['sp']['authnRequest']['scoping']['idpList'] = ['http://idp2.example.com'];
+        $settings3 = new Settings($settingsInfo);
+        $authnRequest3 = new AuthnRequest($settings3);
         $encodedRequest3 = $authnRequest3->getRequest();
         $decoded3 = base64_decode($encodedRequest3);
         $request3 = gzinflate($decoded3);
@@ -148,10 +149,10 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('<samlp:IDPEntry ProviderID="http://idp2.example.com" />', $request3);
         $this->assertNotContains('<samlp:RequesterID>', $request3);
 
-        unset($settingsInfo['idp']['scoping']['idpList']);
-        $settingsInfo['idp']['scoping']['requesterId'] = 'http://sp.example.com';
-        $settings4 = new OneLogin_Saml2_Settings($settingsInfo);
-        $authnRequest4 = new OneLogin_Saml2_AuthnRequest($settings4);
+        unset($settingsInfo['sp']['authnRequest']['scoping']['idpList']);
+        $settingsInfo['sp']['authnRequest']['scoping']['requesterId'] = 'http://sp.example.com';
+        $settings4 = new Settings($settingsInfo);
+        $authnRequest4 = new AuthnRequest($settings4);
         $encodedRequest4 = $authnRequest4->getRequest();
         $decoded4 = base64_decode($encodedRequest4);
         $request4 = gzinflate($decoded4);
