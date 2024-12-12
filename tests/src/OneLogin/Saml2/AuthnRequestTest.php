@@ -126,7 +126,7 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $encodedRequest = $authnRequest->getRequest();
         $decoded = base64_decode($encodedRequest);
         $request = gzinflate($decoded);
-        $this->assertNotContains('<samlp:Scoping', $request);
+        $this->assertStringNotContainsString('<samlp:Scoping', $request);
 
         $settingsInfo['sp']['authnRequest']['scoping']['proxyCount'] = 2;
         $settings2 = new Settings($settingsInfo);
@@ -134,9 +134,9 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $encodedRequest2 = $authnRequest2->getRequest();
         $decoded2 = base64_decode($encodedRequest2);
         $request2 = gzinflate($decoded2);
-        $this->assertContains('<samlp:Scoping ProxyCount="2">', $request2);
-        $this->assertNotContains('<samlp:IDPEntry', $request2);
-        $this->assertNotContains('<samlp:RequesterID>', $request2);
+        $this->assertStringContainsString('<samlp:Scoping ProxyCount="2">', $request2);
+        $this->assertStringNotContainsString('<samlp:IDPEntry', $request2);
+        $this->assertStringNotContainsString('<samlp:RequesterID>', $request2);
 
         unset($settingsInfo['sp']['authnRequest']['scoping']['proxyCount']);
         $settingsInfo['sp']['authnRequest']['scoping']['idpList'] = ['http://idp2.example.com'];
@@ -145,9 +145,9 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $encodedRequest3 = $authnRequest3->getRequest();
         $decoded3 = base64_decode($encodedRequest3);
         $request3 = gzinflate($decoded3);
-        $this->assertNotContains('<samlp:Scoping ProxyCount=', $request3);
-        $this->assertContains('<samlp:IDPEntry ProviderID="http://idp2.example.com" />', $request3);
-        $this->assertNotContains('<samlp:RequesterID>', $request3);
+        $this->assertStringNotContainsString('<samlp:Scoping ProxyCount=', $request3);
+        $this->assertStringContainsString('<samlp:IDPEntry ProviderID="http://idp2.example.com" />', $request3);
+        $this->assertStringNotContainsString('<samlp:RequesterID>', $request3);
 
         unset($settingsInfo['sp']['authnRequest']['scoping']['idpList']);
         $settingsInfo['sp']['authnRequest']['scoping']['requesterId'] = 'http://sp.example.com';
@@ -156,9 +156,9 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $encodedRequest4 = $authnRequest4->getRequest();
         $decoded4 = base64_decode($encodedRequest4);
         $request4 = gzinflate($decoded4);
-        $this->assertNotContains('<samlp:Scoping ProxyCount=', $request4);
-        $this->assertNotContains('<samlp:IDPEntry', $request4);
-        $this->assertContains('<samlp:RequesterID>http://sp.example.com</samlp:RequesterID>', $request4);
+        $this->assertStringNotContainsString('<samlp:Scoping ProxyCount=', $request4);
+        $this->assertStringNotContainsString('<samlp:IDPEntry', $request4);
+        $this->assertStringContainsString('<samlp:RequesterID>http://sp.example.com</samlp:RequesterID>', $request4);
     }
 
     /**
