@@ -1,0 +1,12 @@
+{
+  "name": "php-saml",
+  "license": "MIT",
+  "scripts": {
+    "down": "docker compose -f docker-compose.yaml down -v $@",
+    "up": "docker compose  -f docker-compose.yaml up -d --build",
+    "up:foreground": "docker compose  -f docker-compose.yaml up --build",
+    "ssh": "docker exec -it php-saml-dev bash",
+    "test": "docker exec -it php-saml-dev ./vendor/bin/phpunit",
+    "test:dox": "docker exec -it php-saml-dev ./vendor/bin/phpunit --testdox"
+  }
+}
