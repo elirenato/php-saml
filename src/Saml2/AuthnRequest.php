@@ -150,13 +150,13 @@ REQUESTEDAUTHN;
         $destination = $this->_settings->getIdPSSOUrl();
         
         $scoping = '';
-        if (isset($idpData['scoping'])) {
-            $proxyCount = (isset($idpData['scoping']['proxyCount']) ? ' ProxyCount="' . $idpData['scoping']['proxyCount'] . '"' : '');
-            $requesterId = (isset($idpData['scoping']['requesterId']) ? '<samlp:RequesterID>' . $idpData['scoping']['requesterId'] . '</samlp:RequesterID>' : '');
+        if (isset($spData['scoping'])) {
+            $proxyCount = (isset($spData['scoping']['proxyCount']) ? ' ProxyCount="' . $spData['scoping']['proxyCount'] . '"' : '');
+            $requesterId = (isset($spData['scoping']['requesterId']) ? '<samlp:RequesterID>' . $spData['scoping']['requesterId'] . '</samlp:RequesterID>' : '');
             $idpList = '';
-            if (isset($idpData['scoping']['idpList'])) {
+            if (isset($spData['scoping']['idpList'])) {
                 $idpList = '<samlp:IDPList>';
-                foreach ($idpData['scoping']['idpList'] as $idpListItem) {
+                foreach ($spData['scoping']['idpList'] as $idpListItem) {
                     $idpList .= '<samlp:IDPEntry ProviderID="' . $idpListItem . '" />';
                 }
                 $idpList .= '</samlp:IDPList>';
