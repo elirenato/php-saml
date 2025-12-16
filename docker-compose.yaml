@@ -1,0 +1,9 @@
+services:
+  php-saml-dev:
+    build:
+      context: "."
+      dockerfile: Dockerfile
+    container_name: 'php-saml-dev'
+    tty: true
+    volumes:
+      - .:/var/php-saml
